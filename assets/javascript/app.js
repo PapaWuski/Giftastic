@@ -1,4 +1,4 @@
-var catagories = ["Gundams", "Anime", "HunterxHunter", "JoJo"];
+var catagories = ["Gundams", "Monster Hunter", "HunterxHunter", "JoJo"];
 
 // need to fix movie
 $("#add-gif").on("click", function(event) {
@@ -47,7 +47,7 @@ function displyGifs() {
         var $gifCard = $("<div>").addClass("card");
         var $gifBody = $("<div>").addClass("card-body");
         var $subtitle = $("<h6>")
-          .text( `Rating : ${results[i].rating}`)
+          .text( `Rating : ${results[i].rating.toUpperCase}`)
           .addClass("card-subtitle");
         var $title = $("<h5>")
           .text(results[i].title)
@@ -76,11 +76,14 @@ const pausePlayGif = event => {
       "data-state": "animate",
       src: $(event.target).attr("data-animate")
     });
+    $(event.target).parent().attr("style","background-color:#D0F0C0")
   } else {
     $(event.target).attr({
       "data-state": "still",
       src: $(event.target).attr("data-still")
     });
+    
+    $(event.target).parent().attr("style","background-color:transparent")
   }
 };
 
