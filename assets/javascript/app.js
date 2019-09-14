@@ -1,4 +1,4 @@
-var catagories = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+var catagories = ["Gundams", "Anime", "HunterxHunter", "JoJo"];
 
 // need to fix movie
 $("#add-gif").on("click", function(event) {
@@ -36,7 +36,6 @@ function displyGifs() {
     url,
     method: "GET"
   }).then(function(response) {
-    console.log(response);
     var results = response.data;
     // ========================
 
@@ -53,8 +52,8 @@ function displyGifs() {
         var $title = $("<h5>")
           .text(results[i].title)
           .addClass("card-title");
-        var $tags = $("<p>")
-          .text(results[i].tags)
+        var $upload = $("<p>")
+          .text(`Uploaded on: ${results[i].import_datetime.split(" ")[0]}`)
           .addClass("card-text");
         var $img = $("<img>").attr({
           src: results[i].images.fixed_height_still.url,
@@ -63,7 +62,7 @@ function displyGifs() {
           "data-state": "still",
           class: "gif card-img-top"
         });
-        $gifCard.append($img, $gifBody.append($title, $subtitle, $tags));
+        $gifCard.append($img, $gifBody.append($title, $subtitle, $upload));
         $("#gifs-appear-here").prepend($gifCard);
       }
     }
