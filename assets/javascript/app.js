@@ -7,7 +7,9 @@ $("#add-gif").on("click", function(event) {
   var catagory = $("#name-input")
     .val()
     .trim();
-  console.log(catagory);
+    if (!catagory){
+      return false
+    }
   catagories.push(catagory);
   $("#name-input").val("");
 
@@ -18,11 +20,11 @@ function renderButtons() {
   $("#name-display").empty();
 
   for (var i = 0; i < catagories.length; i++) {
-    var a = $("<button>");
-    a.addClass("catagory");
-    a.attr("data-name", catagories[i]);
-    a.text(catagories[i]);
-    $("#name-display").append(a);
+    var $button = $("<button>");
+    $button.addClass("catagory btn-primary p-3 btn-block");
+    $button.attr("data-name", catagories[i]);
+    $button.text(catagories[i]);
+    $("#name-display").append($button);
   }
 }
 
@@ -39,22 +41,27 @@ function displyGifs() {
     // ========================
   
     $("#gifs-appear-here").empty();
-    for (var i = 0; i < results.length; i++) {
-      var $gifCard = $("<div>").addClass("card");
-      var $gifBody = $("<div>").addClass("card-body");
-      var $subtitle = $("<h6>").text(results[i].rating).addClass("card-subtitle");
-      var $title = $("<h5>").text(results[i].title).addClass("card-title");
-      var $tags = $("<p>").text(results[i].tags).addClass("card-text");
-      var $img = $("<img>").attr({
-        "src": results[i].images.fixed_height_still.url,
-        "data-still":results[i].images.fixed_height_still.url,
-        "data-animate":results[i].images.fixed_height.url,
-        "data-state":"still",
-        "class":"gif card-img-top"
-      });
-      $gifCard.append($img,$gifBody.append($title,$subtitle,$tags));
-      $("#gifs-appear-here").prepend($gifCard);
+    if (!results.length){
+      $("#gifs-appear-here").prepend(`<h1>No Gifs Found for ${gif}!</h1>`);
+    } else{
+      for (var i = 0; i < results.length; i++) {
+        var $gifCard = $("<div>").addClass("card");
+        var $gifBody = $("<div>").addClass("card-body");
+        var $subtitle = $("<h6>").text(results[i].rating).addClass("card-subtitle");
+        var $title = $("<h5>").text(results[i].title).addClass("card-title");
+        var $tags = $("<p>").text(`Rating:${results[i].tags}`).addClass("card-text");
+        var $img = $("<img>").attr({
+          "src": results[i].images.fixed_height_still.url,
+          "data-still":results[i].images.fixed_height_still.url,
+          "data-animate":results[i].images.fixed_height.url,
+          "data-state":"still",
+          "class":"gif card-img-top"
+        });
+        $gifCard.append($img,$gifBody.append($title,$subtitle,$tags));
+        $("#gifs-appear-here").prepend($gifCard);
+      }
     }
+    
   });
 }
 
@@ -63,9 +70,15 @@ function displyGifs() {
 const pausePlayGif = event => {
   const state = $(event.target).attr("data-state");
   if (state === "still"){
-    $(event.target).attr({"data-state":"animate","src":$(event.target).attr("data-animate")})
+    $(event.target).attr({
+      "data-state":"animate",
+    "src":$(event.target).attr("data-animate")
+  })
   }else{
-    $(event.target).attr({"data-state":"still","src":$(event.target).attr("data-still")})
+    $(event.target).attr({
+      "data-state":"still"
+    ,"src":$(event.target).attr("data-still")
+  })
   }
 }
 
